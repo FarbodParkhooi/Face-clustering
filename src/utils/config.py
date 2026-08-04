@@ -1,14 +1,14 @@
 from dataclasses import dataclass, field
+import torchvision.models as models
 
-# Creating frozen class for constant configs
 @dataclass(frozen=True)
-class Detector():
+class DetectorConfig():
     pass
 
 @dataclass(frozen=True)
-class Embedding():
+class EmbeddingConfig():
     pass
 
 @dataclass(frozen=True)
-class Clustering():
+class ClusteringConfig():
     pass
