@@ -1,5 +1,5 @@
 from modules.config import DetectorConfigs
- from torch import nn
+from torch import nn
 
 cfg = DetectorConfigs()
 
