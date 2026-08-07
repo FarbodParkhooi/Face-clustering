@@ -57,3 +57,22 @@ def id_anchors(pyramid_features):
         all_anchors.append(anchors)
         level_ids.append(torch.full((anchors.shape[0],), cfg.level_to_index[level_name], dtype=torch.long))
     return torch.cat(all_anchors, dim=0), torch.cat(level_ids, dim=0)
+
+def match_anchors_to_gt(anchors, gt_boxes):
+    IoUs = torchvision.ops.box_iou(anchors, gt_boxes) # shape (N, M)
+    max_iou_per_anchor, matched_gt_idx = IoUs.max(dim=1)   # both shape (N,)
+    # Creating the labels
+    labels = torch.full((anchors.shape[0],), -1, dtype=torch.long)
+    # Applying the threshold for labels
+    labels[max_iou_per_anchor > cfg.rpn_positive_iou_thresh] = 1
+    labels[max_iou_per_anchor < cfg.rpn_negative_iou_thresh] = 0
+    # Find the best anchors with the highest IoU
+    best_anchor_iou, best_anchor_idx = IoUs.max(dim=0)   # shape (M,)
+    # Update matched_gt_idx 
+    # positive labels
+    labels[best_anchor_idx] = 1
+    matched_gt_idx[best_anchor_idx] = torch.arange(len(gt_boxes), device=anchors.device)
+    # ignored labels
+    matched_gt_idx[labels != 1] = -1
+
+    return (labels, matched_gt_idx)
