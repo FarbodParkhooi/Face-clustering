@@ -1,1 +1,5 @@
 /data
+src/detector/models/__pycache__/backbone.cpython-311.pyc
+src/detector/models/__pycache__/panet.cpython-311.pyc
+src/detector/models/__pycache__/rpn.cpython-311.pyc
+src/detector/modules/__pycache__/config.cpython-311.pyc
