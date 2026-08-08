@@ -76,3 +76,33 @@ def match_anchors_to_gt(anchors, gt_boxes):
     matched_gt_idx[labels != 1] = -1
 
     return (labels, matched_gt_idx)
+
+def sample_anchors(labels, num_samples, positive_fraction):
+    # Separating 1, 0 labels
+    pos_mask = (labels == 1)
+    neg_mask = (labels == 0)
+    # Calculating the number of positive and negatives
+    num_pos_avail = pos_mask.sum().item()
+    num_neg_avail = neg_mask.sum().item()
+    # Calculating available positive and negatives for loss function
+    num_pos_wanted = int(num_samples * positive_fraction)
+    num_pos_wanted = min(num_pos_wanted, num_pos_avail)   # cannot exceed available
+    num_neg_wanted = num_samples - num_pos_wanted
+    num_neg_wanted = min(num_neg_wanted, num_neg_avail)   # cannot exceed available
+    # Get the indices of all positive and negative anchors
+    pos_indices = torch.where(pos_mask)[0] 
+    neg_indices = torch.where(neg_mask)[0]
+    # Selecting positive anchors randomly 
+    pos_perm = torch.randperm(num_pos_avail)[:num_pos_wanted]
+    selected_pos = pos_indices[pos_perm] 
+    # Selecting negative anchors randomly 
+    neg_perm = torch.randperm(num_neg_avail)[:num_neg_wanted]
+    selected_neg = neg_indices[neg_perm]
+    # Combining selected negatives and positive anchors
+    selected = torch.cat([selected_pos, selected_neg])
+    # Creates a tensor with all anchors set to False
+    sample_mask = torch.zeros(labels.shape[0], dtype=torch.bool)
+    # Changes selected anchors to True
+    sample_mask[selected] = True
+
+    return sample_mask
