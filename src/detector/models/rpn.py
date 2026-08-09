@@ -106,3 +106,21 @@ def sample_anchors(labels, num_samples, positive_fraction):
     sample_mask[selected] = True
 
     return sample_mask
+
+def delta_decoder(anchors, deltas):
+    # Calculating anchers real centers
+    anc_cx = (anchors[:, 0] + anchors[:, 2]) / 2.0
+    anc_cy = (anchors[:, 1] + anchors[:, 3]) / 2.0
+    # Calculating ancher height/width
+    anc_w = anchors[:, 2] - anchors[:, 0]
+    anc_h = anchors[:, 3] - anchors[:, 1]
+    
+    pred_cx = anc_cx + deltas[:, 0] * anc_w
+    pred_cy = anc_cy + deltas[:, 1] * anc_h
+    pred_w = anc_w * torch.exp(deltas[:, 2])
+    pred_h = anc_h * torch.exp(deltas[:, 3])
+    x1 = pred_cx - pred_w / 2.0
+    y1 = pred_cy - pred_h / 2.0
+    x2 = pred_cx + pred_w / 2.0
+    y2 = pred_cy + pred_h / 2.0
+    return torch.stack([x1, y1, x2, y2], dim=1)
