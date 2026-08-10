@@ -108,10 +108,10 @@ def sample_anchors(labels, num_samples, positive_fraction):
     return sample_mask
 
 def delta_decoder(anchors, deltas):
-    # Calculating anchers real centers
+    # Calculating anchors real centers
     anc_cx = (anchors[:, 0] + anchors[:, 2]) / 2.0
     anc_cy = (anchors[:, 1] + anchors[:, 3]) / 2.0
-    # Calculating ancher height/width
+    # Calculating anchor height/width
     anc_w = anchors[:, 2] - anchors[:, 0]
     anc_h = anchors[:, 3] - anchors[:, 1]
     
@@ -124,3 +124,29 @@ def delta_decoder(anchors, deltas):
     x2 = pred_cx + pred_w / 2.0
     y2 = pred_cy + pred_h / 2.0
     return torch.stack([x1, y1, x2, y2], dim=1)
+
+def delta_encoder(anchor, ground_truth):
+    a_x1, a_y1, a_x2, a_y2 = anchor
+    gt_x1, gt_y1, gt_x2, gt_y2 = ground_truth
+    # Calculating anchor centers
+    anc_cx = (a_x1 + a_x2) / 2
+    anc_cy = (a_y1 + a_y2) / 2
+    # Calculating anchor height/width
+    anc_w = a_x2 - a_x1
+    anc_h = a_y2 - a_y1
+
+    # Calculating ground truth centers
+    gt_cx = (gt_x1 + gt_x2) / 2
+    gt_cy = (gt_y1 + gt_y2) / 2
+    # Calculating ground truth height/width
+    gt_w = gt_x2 - gt_x1
+    gt_h = gt_y2 - gt_y1
+
+    # Computing delta for the center shift
+    dx = (gt_cx - anc_cx) / anc_w
+    dy = (gt_cy - anc_cy) / anc_h
+    # Computing delta width and height
+    dw = torch.log(gt_w / anc_w)
+    dh = torch.log(gt_h / anc_h)
+
+    return torch.stack([dx, dy, dw, dh], dim=1)
