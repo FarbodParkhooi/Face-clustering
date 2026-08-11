@@ -150,3 +150,28 @@ def delta_encoder(anchor, ground_truth):
     dh = torch.log(gt_h / anc_h)
 
     return torch.stack([dx, dy, dw, dh], dim=1)
+
+def generate_proposal(all_anchors, objectness_scores, deltas):
+    # Decoding all the boxes
+    decoded_boxes = delta_decoder(all_anchors, deltas) 
+    # Creating a mask with the boxes where score is over the threshhold
+    keep_mask = objectness_scores > cfg.score_thresh
+    # Applying mask to just keep boxes over the threshhold
+    decoded_boxes = decoded_boxes[keep_mask]
+    scores = objectness_scores[keep_mask]
+    # Sorting boxes by score
+    sorted_indices = scores.argsort(descending=True)
+    decoded_boxes = decoded_boxes[sorted_indices]
+    scores = scores[sorted_indices]
+    # Keeping pre_nms_top_n 
+    if decoded_boxes.shape[0] > cfg.pre_nms_top_n:
+        decoded_boxes = decoded_boxes[:cfg.pre_nms_top_n]
+        scores = scores[:cfg.pre_nms_top_n]
+    # Applying NMS
+    keep_indices = torchvision.ops.nms(decoded_boxes, scores, cfg.nms_thresh)
+    # Keeping only post_nms_top_n 
+    if keep_indices.shape[0] > cfg.post_nms_top_n:
+        keep_indices = keep_indices[:cfg.post_nms_top_n]
+    proposals = decoded_boxes[keep_indices]
+    proposal_scores = scores[keep_indices]
+    return (proposals, proposal_scores)

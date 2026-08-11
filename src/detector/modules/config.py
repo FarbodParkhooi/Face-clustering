@@ -40,6 +40,7 @@ class DetectorConfigs():
         "P6": 4
     })
 
+    # RPN
     anchors_per_image: int = 1024
     rpn_positive_fraction: float = 0.5          # fixed type: float
     rpn_pre_nms_top_n: int = 10000
@@ -48,3 +49,9 @@ class DetectorConfigs():
     # IoU thresholds for matching
     rpn_positive_iou_thresh: float = 0.65       # added type annotation
     rpn_negative_iou_thresh: float = 0.45       # added type annotation
+
+    # Pre NMS and NMS
+    score_thresh: float = 0.5  # Minimum objectness to keep a box
+    pre_nms_top_n: int = 6000
+    nms_thresh: float = 0.7
+    post_nms_top_n:int = 300
