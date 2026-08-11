@@ -125,9 +125,9 @@ def delta_decoder(anchors, deltas):
     y2 = pred_cy + pred_h / 2.0
     return torch.stack([x1, y1, x2, y2], dim=1)
 
-def delta_encoder(anchor, ground_truth):
-    a_x1, a_y1, a_x2, a_y2 = anchor
-    gt_x1, gt_y1, gt_x2, gt_y2 = ground_truth
+def delta_encoder(anchors, gt_s):
+    a_x1, a_y1, a_x2, a_y2 = anchors[:, 0], anchors[:, 1], anchors[:, 2], anchors[:, 3]
+    gt_x1, gt_y1, gt_x2, gt_y2 = gt_s[:, 0], gt_s[:, 1], gt_s[:, 2], gt_s[:, 3]
     # Calculating anchor centers
     anc_cx = (a_x1 + a_x2) / 2
     anc_cy = (a_y1 + a_y2) / 2
