@@ -43,6 +43,8 @@ class DetectorConfigs():
     # RPN
     anchors_per_image: int = 1024
     rpn_positive_fraction: float = 0.5          # fixed type: float
+    label_smoothing: float = 0.1
+    rpn_reg_loss_weight: float = 1.0
 
     # IoU thresholds for matching
     rpn_positive_iou_thresh: float = 0.65       # added type annotation
@@ -53,3 +55,7 @@ class DetectorConfigs():
     pre_nms_top_n: int = 10000
     nms_thresh: float = 0.7
     post_nms_top_n:int = 512
+
+    # Focal Loss
+    focal_loss_alpha: float = 0.25
+    focal_loss_gamma: float = 2.0
