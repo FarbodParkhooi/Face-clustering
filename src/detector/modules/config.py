@@ -42,13 +42,12 @@ class DetectorConfigs():
 
     # RPN
     anchors_per_image: int = 1024
-    rpn_positive_fraction: float = 0.5          # fixed type: float
     label_smoothing: float = 0.1
-    rpn_reg_loss_weight: float = 1.0
 
     # IoU thresholds for matching
-    rpn_positive_iou_thresh: float = 0.65       # added type annotation
-    rpn_negative_iou_thresh: float = 0.45       # added type annotation
+    positive_iou_thresh: float = 0.65
+    negative_iou_thresh: float = 0.45
+    positive_fraction: float = 0.5
 
     # Pre NMS and NMS
     score_thresh: float = 0.5  # Minimum objectness to keep a box
@@ -59,3 +58,14 @@ class DetectorConfigs():
     # Focal Loss
     focal_loss_alpha: float = 0.25
     focal_loss_gamma: float = 2.0
+
+    # RoI Head
+    roi_canonical_scale: float = 224.0
+    roi_canonical_level: int   = 4
+    roi_pool_size: int = 7
+    roi_hidden_dim: int = 256
+    roi_batch_size: int = 256
+    roi_score_threshold: float = 0.05
+
+    # Regression
+    reg_loss_weight: float = 1.0
