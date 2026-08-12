@@ -65,8 +65,8 @@ def match_anchors_to_gt(anchors, gt_boxes):
     # Creating the labels
     labels = torch.full((anchors.shape[0],), -1, dtype=torch.long)
     # Applying the threshold for labels
-    labels[max_iou_per_anchor > cfg.rpn_positive_iou_thresh] = 1
-    labels[max_iou_per_anchor < cfg.rpn_negative_iou_thresh] = 0
+    labels[max_iou_per_anchor > cfg.positive_iou_thresh] = 1
+    labels[max_iou_per_anchor < cfg.negative_iou_thresh] = 0
     # Find the best anchors with the highest IoU
     best_anchor_iou, best_anchor_idx = IoUs.max(dim=0)   # shape (M,)
     # Update matched_gt_idx 
@@ -210,7 +210,7 @@ class RPN(nn.Module):
         # Matching anchors to ground truthes 
         labels, matched_gt_idx = match_anchors_to_gt(all_anchors, gt_boxes)
         # Sampling a balanced mini batch
-        sample_mask = sample_anchors(labels, cfg.anchors_per_image, cfg.rpn_positive_fraction)
+        sample_mask = sample_anchors(labels, cfg.anchors_per_image, cfg.positive_fraction)
         # Classification loss
         sampled_logits = obj_logits[sample_mask]
         sampled_labels = labels[sample_mask].float()
@@ -236,7 +236,7 @@ class RPN(nn.Module):
             # Encode GT into deltas
             target_deltas = delta_encoder(pos_anchors, matched_gt)
             # Smooth L1 loss
-            reg_loss = F1.smooth_l1_loss(pos_pred_deltas, target_deltas) * cfg.rpn_reg_loss_weight
+            reg_loss = F1.smooth_l1_loss(pos_pred_deltas, target_deltas) * cfg.reg_loss_weight
         else:
             reg_loss = torch.tensor(0.0, device=device)
         # Generating proposal
