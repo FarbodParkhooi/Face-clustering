@@ -69,3 +69,8 @@ class DetectorConfigs():
 
     # Regression
     reg_loss_weight: float = 1.0
+
+    # Augmentation
+    # Random scale jitter
+    aug_scale_min: float = 420.0
+    aug_scale_max: float = 2048.0
