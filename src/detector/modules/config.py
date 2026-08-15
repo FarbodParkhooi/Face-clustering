@@ -74,3 +74,9 @@ class DetectorConfigs():
     # Random scale jitter
     aug_scale_min: float = 420.0
     aug_scale_max: float = 2048.0
+    # Random crop
+    aug_crop_scale_min: float = 0.3
+    aug_crop_scale_max: float = 1.0
+    aug_crop_aspect_min: float = 0.4
+    aug_crop_aspect_max: float = 2.3
+    aug_crop_keep_iou: float = 0.6
