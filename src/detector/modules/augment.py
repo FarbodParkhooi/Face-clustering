@@ -95,3 +95,22 @@ def random_crop(image, boxes):
         new_boxes.append([new_x1, new_y1, new_x2, new_y2])
 
     return cropped_image, np.array(new_boxes)
+
+def random_horizontal_flip(image, boxes):
+    # Randomly decide whether to flip
+    if random.random() < cfg.aug_flip_prob:
+        # Flip the image horizontally
+        image = cv2.flip(image, 1)   # 1 means horizontal flip
+
+        # Update box x-coordinates
+        if len(boxes) > 0:
+            h, w = image.shape[:2]
+            # For each box: x1_new = w - old_x2, x2_new = w - old_x1
+            new_boxes = boxes.copy()
+            old_x1 = boxes[:, 0].copy()
+            old_x2 = boxes[:, 2].copy()
+            new_boxes[:, 0] = w - old_x2
+            new_boxes[:, 2] = w - old_x1
+            boxes = new_boxes
+
+    return image, boxes
