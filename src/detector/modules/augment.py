@@ -5,14 +5,14 @@ import cv2
 
 cfg = DetectorConfigs()
 
-def random_scale_jitter(image, boxes, config):
+def random_scale_jitter(image, boxes):
     # Get current height and width
     h, w = image.shape[:2]
     # Current shorter side
     short_side = min(h, w)
 
     # Randomly choose a new shorter side length
-    target_short_side = random.uniform(config.aug_scale_min, config.aug_scale_max)
+    target_short_side = random.uniform(cfg.aug_scale_min, cfg.aug_scale_max)
 
     # Compute scaling factor
     scale = target_short_side / short_side
