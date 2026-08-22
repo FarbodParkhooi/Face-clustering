@@ -142,3 +142,21 @@ def random_color_jitter(image):
         image = cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
 
     return image
+
+def random_motion_blur(image):
+    # Random kernel size
+    size = random.choice([5, 7, 9, 11])
+    # Random direction (horizontal or vertical)
+    if random.random() < 0.5:
+        # Horizontal motion: all elements in a row
+        kernel = np.zeros((size, size), dtype=np.float32)
+        kernel[size // 2, :] = 1.0
+    else:
+        # Vertical motion: all elements in a column
+        kernel = np.zeros((size, size), dtype=np.float32)
+        kernel[:, size // 2] = 1.0
+    # Normalize kernel
+    kernel /= size
+    # Apply convolution
+    image = cv2.filter2D(image, -1, kernel)
+    return image
