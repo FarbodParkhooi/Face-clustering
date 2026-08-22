@@ -168,3 +168,12 @@ def random_gaussian_blur(image):
     image = cv2.GaussianBlur(image, (kernel_size, kernel_size), 0)
     return image
 
+def random_blur(image):
+    # Decide whether to blur
+    if random.random() < cfg.aug_blur_prob:
+        # Choose blur type
+        if random.random() < 0.5:
+            image = random_gaussian_blur(image)
+        else:
+            image = random_motion_blur(image)
+    return image
