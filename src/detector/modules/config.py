@@ -81,4 +81,10 @@ class DetectorConfigs():
     aug_crop_aspect_max: float = 2.3
     aug_crop_keep_iou: float = 0.6
     # Random horizontal flip
-    aug_flip_prob:float = 0.5
+    aug_flip_prob: float = 0.5
+    # Random color jitter
+    aug_color_jitter_prob: float = 0.3
+    aug_brightness: float = 0.2 
+    aug_contrast: float = 0.2 
+    aug_saturation: float = 0.2 
+    aug_hue: float = 0.1 

@@ -114,3 +114,31 @@ def random_horizontal_flip(image, boxes):
             boxes = new_boxes
 
     return image, boxes
+
+def random_color_jitter(image):
+    # Brightness
+    if random.random() < cfg.aug_color_jitter_prob:
+        factor = random.uniform(-cfg.aug_brightness, cfg.aug_brightness)
+        image = np.clip(image + factor * 255.0, 0, 255).astype(np.uint8)
+
+    # Contrast
+    if random.random() < cfg.aug_color_jitter_prob:
+        factor = random.uniform(1 - cfg.aug_contrast, 1 + cfg.aug_contrast)
+        mean = np.mean(image, axis=(0, 1), keepdims=True)
+        image = np.clip((image - mean) * factor + mean, 0, 255).astype(np.uint8)
+
+    # Saturation
+    if random.random() < cfg.aug_color_jitter_prob:
+        gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+        gray = np.stack([gray] * 3, axis=-1)
+        factor = random.uniform(1 - cfg.aug_saturation, 1 + cfg.aug_saturation)
+        image = np.clip(image * factor + gray * (1 - factor), 0, 255).astype(np.uint8)
+
+    # Hue
+    if random.random() < cfg.aug_color_jitter_prob:
+        hsv = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
+        shift = random.uniform(-cfg.aug_hue, cfg.aug_hue) * 180.0
+        hsv[:, :, 0] = (hsv[:, :, 0] + shift) % 180.0
+        image = cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
+
+    return image
