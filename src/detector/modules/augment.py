@@ -177,3 +177,11 @@ def random_blur(image):
         else:
             image = random_motion_blur(image)
     return image
+
+def apply_augmentations(image, boxes):
+    image, boxes = random_scale_jitter(image, boxes)
+    image, boxes = random_crop(image, boxes)
+    image, boxes = random_horizontal_flip(image, boxes)
+    image = random_color_jitter(image)
+    image = random_blur(image)
+    return image, boxes
