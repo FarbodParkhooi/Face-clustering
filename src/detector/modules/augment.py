@@ -94,7 +94,7 @@ def random_crop(image, boxes):
 
         new_boxes.append([new_x1, new_y1, new_x2, new_y2])
 
-    return cropped_image, np.array(new_boxes)
+    return cropped_image, np.array(new_boxes, dtype=np.float32).reshape(-1, 4)
 
 def random_horizontal_flip(image, boxes):
     # Randomly decide whether to flip
