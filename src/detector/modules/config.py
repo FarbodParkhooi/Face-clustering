@@ -88,3 +88,5 @@ class DetectorConfigs():
     aug_contrast: float = 0.2 
     aug_saturation: float = 0.2 
     aug_hue: float = 0.1 
+    # Random Blur
+    aug_blur_prob: float = 0.3

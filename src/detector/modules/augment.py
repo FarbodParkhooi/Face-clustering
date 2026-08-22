@@ -160,3 +160,11 @@ def random_motion_blur(image):
     # Apply convolution
     image = cv2.filter2D(image, -1, kernel)
     return image
+
+def random_gaussian_blur(image):
+    # Pick a random odd kernel size
+    kernel_size = random.choice([3, 5, 7, 9])
+    # Apply Gaussian blur
+    image = cv2.GaussianBlur(image, (kernel_size, kernel_size), 0)
+    return image
+
