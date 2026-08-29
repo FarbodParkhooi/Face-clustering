@@ -63,7 +63,6 @@ def random_crop(image, boxes):
 
     # Copy boxes so we can modify them
     new_boxes = []
-    crop_box = np.array([x1, y1, x2, y2])  # for IoU calculation
 
     for box in boxes:
         bx1, by1, bx2, by2 = box
