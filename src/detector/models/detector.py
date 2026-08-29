@@ -1,3 +1,5 @@
+# detector.py
+
 from torch import nn
 from models.backbone import backbone
 from models.panet import PANet

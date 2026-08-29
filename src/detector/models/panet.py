@@ -1,3 +1,5 @@
+# panet.py
+
 from modules.config import DetectorConfigs
 from torch import nn
 
