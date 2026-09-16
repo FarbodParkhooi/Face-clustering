@@ -112,3 +112,13 @@ class DetectorConfigs():
     sample_save_path: str = f"{training_output_dir}/samples"
     device: str = "gpu"
     save_checkpoint_every_epoch: int = 10
+
+    # Infer
+    final_model_path: str = f"{model_save_path}/final_model.pth"
+    infer_output_dir: str = "infer_outputs"
+    infer_image_dir: str = f"{infer_output_dir}/images"
+    infer_score_threshold: float = 0.05
+    infer_min_face_size:int = 10
+    infer_nms_threshold: float = 0.4
+    infer_crop_size: int = 112
+    infer_metadata_path: str = f"{infer_output_dir}/annotations.json"
