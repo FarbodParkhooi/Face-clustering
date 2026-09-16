@@ -1,16 +1,18 @@
 # dataset.py
 
-import json
-import numpy as np
-import cv2
-import torch
-from torch.utils.data import Dataset
-
-from modules.config import DetectorConfigs
 from modules.augment import apply_augmentations
+from modules.config import DetectorConfigs
+from torch.utils.data import DataLoader
+from torch.utils.data import Dataset
+import numpy as np
+import torch
+import json
+import cv2
+
 
 cfg = DetectorConfigs()
 
+# Custom dataset class
 class FaceDataset(Dataset):
     def __init__(self, json_path, config=cfg):
         """
@@ -55,3 +57,20 @@ class FaceDataset(Dataset):
         labels_tensor = torch.ones(boxes_tensor.shape[0], dtype=torch.long)   # all faces
 
         return image, boxes_tensor, labels_tensor
+
+# Dataloader function
+def FaceDataloader():
+    dataset = FaceDataset(cfg.annotation_path)
+    dataloader = DataLoader(
+        dataset,
+        batch_size=cfg.batch_size,
+        shuffle=cfg.shuffle,
+        num_workers=cfg.num_workers,
+        drop_last=False,
+        pin_memory=True,
+        persistent_workers=True,
+        prefetch_factor=cfg.prefetch_factor,
+        collate_fn=lambda batch: batch
+    )
+
+    return dataloader
