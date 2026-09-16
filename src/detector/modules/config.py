@@ -92,3 +92,11 @@ class DetectorConfigs():
     aug_hue: float = 0.1 
     # Random Blur
     aug_blur_prob: float = 0.3
+
+    # Dataset loading
+    batch_size: int = 512
+    shuffle: bool = True
+    num_workers: int = 8
+    prefetch_factor: int = 2
+    annotation_path: str = "data/train_annotations.json"
+
