@@ -100,3 +100,15 @@ class DetectorConfigs():
     prefetch_factor: int = 2
     annotation_path: str = "data/train_annotations.json"
 
+    # Training process
+    learning_rate: float = 0.0005 
+    momentum: float = 0.9 
+    weight_decay: float = 0.0001 
+    lr_step_size: int = 20
+    lr_gamma: float = 0.5 
+    num_epochs: int = 30
+    training_output_dir: str = "training_outputs"
+    model_save_path: str = f"{training_output_dir}/saved_models"
+    sample_save_path: str = f"{training_output_dir}/samples"
+    device: str = "gpu"
+    save_checkpoint_every_epoch: int = 10
